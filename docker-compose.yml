@@ -1,0 +1,21 @@
+services:
+  ubuntu-ts:
+    build: .
+    container_name: ubuntu-tailscale
+    hostname: ${TS_HOSTNAME:-docker-linux}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_HOSTNAME=${TS_HOSTNAME:-docker-linux}
+    volumes:
+      - tailscale-data:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+
+volumes:
+  tailscale-data:
